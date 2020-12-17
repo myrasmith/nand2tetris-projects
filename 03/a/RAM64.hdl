@@ -15,5 +15,74 @@ CHIP RAM64 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    Not(in=address[3], out=nad3);
+    Not(in=address[4], out=nad4);
+    Not(in=address[5], out=nad5);
+
+    And(a=nad3, b=nad4, out=ram00);
+    And(a=nad5, b=ram00, out=ram0);
+    And(a=ram0, b=load, out=loadRam0);
+    Mux16(sel=ram0, b=true, a=false, out=ram016);
+
+    And(a=address[3], b=nad4, out=ram10);
+    And(a=nad5, b=ram10, out=ram1);
+    And(a=ram1, b=load, out=loadRam1);
+    Mux16(sel=ram1, b=true, a=false, out=ram116);
+
+    And(a=nad3, b=address[4], out=ram20);
+    And(a=nad5, b=ram20, out=ram2);
+    And(a=ram2, b=load, out=loadRam2);
+    Mux16(sel=ram2, b=true, a=false, out=ram216);
+
+    And(a=address[3], b=address[4], out=ram30);
+    And(a=nad5, b=ram30, out=ram3);
+    And(a=ram3, b=load, out=loadRam3);
+    Mux16(sel=ram3, b=true, a=false, out=ram316);
+
+    And(a=nad3, b=nad4, out=ram40);
+    And(a=address[5], b=ram40, out=ram4);
+    And(a=ram4, b=load, out=loadRam4);
+    Mux16(sel=ram4, b=true, a=false, out=ram416);
+
+    And(a=address[3], b=nad4, out=ram50);
+    And(a=address[5], b=ram50, out=ram5);
+    And(a=ram5, b=load, out=loadRam5);
+    Mux16(sel=ram5, b=true, a=false, out=ram516);
+
+    And(a=nad3, b=address[4], out=ram60);
+    And(a=address[5], b=ram60, out=ram6);
+    And(a=ram6, b=load, out=loadRam6);
+    Mux16(sel=ram6, b=true, a=false, out=ram616);
+
+    And(a=address[3], b=address[4], out=ram70);
+    And(a=address[5], b=ram70, out=ram7);
+    And(a=ram7, b=load, out=loadRam7);
+    Mux16(sel=ram7, b=true, a=false, out=ram716);
+
+
+    RAM8(in=in, load=loadRam0, address=address[0..2], out=out0);
+    RAM8(in=in, load=loadRam1, address=address[0..2], out=out1);
+    RAM8(in=in, load=loadRam2, address=address[0..2], out=out2);
+    RAM8(in=in, load=loadRam3, address=address[0..2], out=out3);
+    RAM8(in=in, load=loadRam4, address=address[0..2], out=out4);
+    RAM8(in=in, load=loadRam5, address=address[0..2], out=out5);
+    RAM8(in=in, load=loadRam6, address=address[0..2], out=out6);
+    RAM8(in=in, load=loadRam7, address=address[0..2], out=out7);
+
+    And16(a=ram016, b=out0, out=a0);
+    And16(a=ram116, b=out1, out=a1);
+    And16(a=ram216, b=out2, out=a2);
+    And16(a=ram316, b=out3, out=a3);
+    And16(a=ram416, b=out4, out=a4);
+    And16(a=ram516, b=out5, out=a5);
+    And16(a=ram616, b=out6, out=a6);
+    And16(a=ram716, b=out7, out=a7);
+
+    Or16(a=a0, b=a1, out=o0);
+    Or16(a=a2, b=o0, out=o1);
+    Or16(a=a3, b=o1, out=o2);
+    Or16(a=a4, b=o2, out=o3);
+    Or16(a=a5, b=o3, out=o4);
+    Or16(a=a6, b=o4, out=o5);
+    Or16(a=a7, b=o5, out=out);
 }

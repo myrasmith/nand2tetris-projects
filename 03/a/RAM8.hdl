@@ -15,5 +15,89 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    Not(in=address[0], out=nad0);
+    Not(in=address[1], out=nad1);
+    Not(in=address[2], out=nad2);
+
+
+    // 0
+    And(a=nad0, b=nad1, out=ad00);
+    And(a=nad2, b=ad00, out=ad0);
+    And(a=ad0, b=load, out=load0);
+    Mux16(a=false, b=true, sel=ad0, out=ad016);
+
+    // 1
+    And(a=address[0], b=nad1, out=ad10);
+    And(a=nad2, b=ad10, out=ad1);
+    And(a=ad1, b=load, out=load1);
+    Mux16(a=false, b=true, sel=ad1, out=ad116);
+
+    // 2
+    And(a=nad0, b=address[1], out=ad20);
+    And(a=nad2, b=ad20, out=ad2);
+    And(a=ad2, b=load, out=load2);
+    Mux16(a=false, b=true, sel=ad2, out=ad216);
+
+    // 3
+    And(a=address[0], b=address[1], out=ad30);
+    And(a=nad2, b=ad30, out=ad3);
+    And(a=ad3, b=load, out=load3);
+    Mux16(a=false, b=true, sel=ad3, out=ad316);
+
+    // 4
+    And(a=nad0, b=nad1, out=ad40);
+    And(a=address[2], b=ad40, out=ad4);
+    And(a=ad4, b=load, out=load4);
+    Mux16(a=false, b=true, sel=ad4, out=ad416);
+
+    // 5
+    And(a=address[0], b=nad1, out=ad50);
+    And(a=address[2], b=ad50, out=ad5);
+    And(a=ad5, b=load, out=load5);
+    Mux16(a=false, b=true, sel=ad5, out=ad516);
+
+    // 6
+    And(a=nad0, b=address[1], out=ad60);
+    And(a=address[2], b=ad60, out=ad6);
+    And(a=ad6, b=load, out=load6);
+    Mux16(a=false, b=true, sel=ad6, out=ad616);
+
+    // 7
+    And(a=address[0], b=address[1], out=ad70);
+    And(a=address[2], b=ad70, out=ad7);
+    And(a=ad7, b=load, out=load7);
+    Mux16(a=false, b=true, sel=ad7, out=ad716);
+ 
+
+    Register(in=in, load=load0, out=out00);
+    And16(a=ad016, b=out00, out=out0);
+
+    Register(in=in, load=load1, out=out10);
+    And16(a=ad116, b=out10, out=out1);
+
+    Register(in=in, load=load2, out=out20);
+    And16(a=ad216, b=out20, out=out2);
+
+    Register(in=in, load=load3, out=out30);
+    And16(a=ad316, b=out30, out=out3);
+
+    Register(in=in, load=load4, out=out40);
+    And16(a=ad416, b=out40, out=out4);
+
+    Register(in=in, load=load5, out=out50);
+    And16(a=ad516, b=out50, out=out5);
+
+    Register(in=in, load=load6, out=out60);
+    And16(a=ad616, b=out60, out=out6);
+
+    Register(in=in, load=load7, out=out70);
+    And16(a=ad716, b=out70, out=out7);
+
+    Or16(a=out0, b=out1, out=or0);
+    Or16(a=out2, b=or0, out=or1);
+    Or16(a=out3, b=or1, out=or2);
+    Or16(a=out4, b=or2, out=or3);
+    Or16(a=out5, b=or3, out=or4);
+    Or16(a=out6, b=or4, out=or5);
+    Or16(a=out7, b=or5, out=out);
 }

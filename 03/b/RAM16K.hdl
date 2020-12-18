@@ -15,46 +15,12 @@ CHIP RAM16K {
     OUT out[16];
 
     PARTS:
-    Not(in=address[0], out=nad0);
-    Not(in=address[1], out=nad1);
-    Not(in=address[2], out=nad2);
-
-    And(a=nad0, b=nad1, out=ram0);
-    And(a=address[0], b=nad1, out=ram1);
-    And(a=nad0, b=address[1], out=ram2);
-    And(a=address[0], b=address[1], out=ram3);
-
-    // And(a=lsb0, b=nad2, out=ram0);
-    // And(a=lsb1, b=nad2, out=ram1);
-    // And(a=lsb2, b=nad2, out=ram2);
-    // And(a=lsb3, b=nad2, out=ram3);
-    // And(a=lsb0, b=address[2], out=ram4);
-    // And(a=lsb1, b=address[2], out=ram5);
-    // And(a=lsb2, b=address[2], out=ram6);
-    // And(a=lsb3, b=address[2], out=ram7);
-
-    Mux16(sel=ram0, b=true, a=false, out=ram016);
-    Mux16(sel=ram1, b=true, a=false, out=ram116);
-    Mux16(sel=ram2, b=true, a=false, out=ram216);
-    Mux16(sel=ram3, b=true, a=false, out=ram316);
-
-    And(a=load, b=ram0, out=load0);
-    And(a=load, b=ram1, out=load1);
-    And(a=load, b=ram2, out=load2);
-    And(a=load, b=ram3, out=load3);
+    DMux4Way(in=load, sel=address[0..1], a=load0, b=load1, c=load2, d=load3);
 
     RAM4K(in=in, load=load0, address=address[2..13], out=out0);
     RAM4K(in=in, load=load1, address=address[2..13], out=out1);
     RAM4K(in=in, load=load2, address=address[2..13], out=out2);
     RAM4K(in=in, load=load3, address=address[2..13], out=out3);
   
-
-    And16(a=ram016, b=out0, out=a0);
-    And16(a=ram116, b=out1, out=a1);
-    And16(a=ram216, b=out2, out=a2);
-    And16(a=ram316, b=out3, out=a3);
-  
-    Or16(a=a0, b=a1, out=or0);
-    Or16(a=a2, b=or0, out=or1);
-    Or16(a=a3, b=or1, out=out);
+    Mux4Way16(a=out0, b=out1, c=out2, d=out3, sel=address[0..1], out=out); 
 }

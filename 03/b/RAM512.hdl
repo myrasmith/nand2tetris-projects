@@ -15,41 +15,7 @@ CHIP RAM512 {
     OUT out[16];
 
     PARTS:
-    Not(in=address[0], out=nad0);
-    Not(in=address[1], out=nad1);
-    Not(in=address[2], out=nad2);
-
-    And(a=nad0, b=nad1, out=lsb0);
-    And(a=address[0], b=nad1, out=lsb1);
-    And(a=nad0, b=address[1], out=lsb2);
-    And(a=address[0], b=address[1], out=lsb3);
-
-    And(a=lsb0, b=nad2, out=ram0);
-    And(a=lsb1, b=nad2, out=ram1);
-    And(a=lsb2, b=nad2, out=ram2);
-    And(a=lsb3, b=nad2, out=ram3);
-    And(a=lsb0, b=address[2], out=ram4);
-    And(a=lsb1, b=address[2], out=ram5);
-    And(a=lsb2, b=address[2], out=ram6);
-    And(a=lsb3, b=address[2], out=ram7);
-
-    Mux16(sel=ram0, b=true, a=false, out=ram016);
-    Mux16(sel=ram1, b=true, a=false, out=ram116);
-    Mux16(sel=ram2, b=true, a=false, out=ram216);
-    Mux16(sel=ram3, b=true, a=false, out=ram316);
-    Mux16(sel=ram4, b=true, a=false, out=ram416);
-    Mux16(sel=ram5, b=true, a=false, out=ram516);
-    Mux16(sel=ram6, b=true, a=false, out=ram616);
-    Mux16(sel=ram7, b=true, a=false, out=ram716);
-
-    And(a=load, b=ram0, out=load0);
-    And(a=load, b=ram1, out=load1);
-    And(a=load, b=ram2, out=load2);
-    And(a=load, b=ram3, out=load3);
-    And(a=load, b=ram4, out=load4);
-    And(a=load, b=ram5, out=load5);
-    And(a=load, b=ram6, out=load6);
-    And(a=load, b=ram7, out=load7);
+    DMux8Way(in=load, sel=address[0..2], a=load0, b=load1, c=load2, d=load3, e=load4, f=load5, g=load6, h=load7);
 
     RAM64(in=in, load=load0, address=address[3..8], out=out0);
     RAM64(in=in, load=load1, address=address[3..8], out=out1);
@@ -60,22 +26,5 @@ CHIP RAM512 {
     RAM64(in=in, load=load6, address=address[3..8], out=out6);
     RAM64(in=in, load=load7, address=address[3..8], out=out7);
 
-    And16(a=ram016, b=out0, out=a0);
-    And16(a=ram116, b=out1, out=a1);
-    And16(a=ram216, b=out2, out=a2);
-    And16(a=ram316, b=out3, out=a3);
-    And16(a=ram416, b=out4, out=a4);
-    And16(a=ram516, b=out5, out=a5);
-    And16(a=ram616, b=out6, out=a6);
-    And16(a=ram716, b=out7, out=a7);
-
-    Or16(a=a0, b=a1, out=or0);
-    Or16(a=a2, b=or0, out=or1);
-    Or16(a=a3, b=or1, out=or2);
-    Or16(a=a4, b=or2, out=or3);
-    Or16(a=a5, b=or3, out=or4);
-    Or16(a=a6, b=or4, out=or5);
-    Or16(a=a7, b=or5, out=out);
-
-
+    Mux8Way16(a=out0, b=out1, c=out2, d=out3, e=out4, f=out5, g=out6, h=out7, sel=address[0..2], out=out);
 }
